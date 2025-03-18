@@ -208,9 +208,9 @@ const Environment: React.FC<EnvironmentProps> = ({
       {/* Nuages si le temps est nuageux ou pluvieux - réduits et positionnés différemment */}
       {(weather === 'cloudy' || weather === 'rainy') && (
         <group ref={cloudsRef}>
-          <Cloud position={[-4, 6, -12]} speed={0.1} opacity={0.7} width={8} depth={1.5} />
-          <Cloud position={[2, 8, -15]} speed={0.05} opacity={0.5} width={6} depth={1} />
-          <Cloud position={[8, 7, -18]} speed={0.15} opacity={0.6} width={10} depth={1.5} />
+          <Cloud position={[-4, 6, -12]} speed={0.1} opacity={0.7} segments={8} scale={8} />
+          <Cloud position={[2, 8, -15]} speed={0.05} opacity={0.5} segments={6} scale={6} />
+          <Cloud position={[8, 7, -18]} speed={0.15} opacity={0.6} segments={10} scale={10} />
         </group>
       )}
       

@@ -1,6 +1,6 @@
-import React, { useRef, useState } from 'react';
 import { useSpring, animated } from '@react-spring/three';
 import { useFrame, useThree } from '@react-three/fiber';
+import React, { useRef, useState } from 'react';
 import * as THREE from 'three';
 
 interface DeskItemsProps {
@@ -25,25 +25,27 @@ const DeskItems: React.FC<DeskItemsProps> = ({ timeOfDay }) => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   
   // Animations avec react-spring - ralentissement des animations pour réduire les glitches
-  const pencilSpring = useSpring({
-    to: {
-      rotation: pencilRotated ? [0, 0, Math.PI * 0.25] : [0, 0, 0],
-      position: pencilRotated ? [3, 0.05, 0.5] : [3, 0.05, 0],
-    },
+  const pencilProps = useSpring({
+    px: pencilRotated ? 3 : 3,
+    py: pencilRotated ? 0.05 : 0.05,
+    pz: pencilRotated ? 0.5 : 0,
+    rx: 0,
+    ry: 0,
+    rz: pencilRotated ? Math.PI * 0.25 : 0,
     config: { tension: 120, friction: 30 } // Valeurs plus faibles pour animations plus douces
   });
   
-  const coffeeSpring = useSpring({
-    to: {
-      steamOpacity: coffeeHot ? 1 : 0,
-    },
+  // Animation d'opacité pour la vapeur de café
+  const steamOpacity = useSpring({
+    opacity: coffeeHot ? 1 : 0,
     config: { duration: 2500 } // Durée plus longue pour transition plus douce
   });
   
-  const notebookSpring = useSpring({
-    to: {
-      rotation: notebookOpen ? [0, Math.PI * 0.1, 0] : [0, 0, 0],
-    },
+  // Animation de rotation du cahier
+  const notebookProps = useSpring({
+    rx: 0,
+    ry: notebookOpen ? Math.PI * 0.1 : 0,
+    rz: 0,
     config: { tension: 80, friction: 20 } // Valeurs plus faibles pour animations plus douces
   });
   
@@ -120,7 +122,6 @@ const DeskItems: React.FC<DeskItemsProps> = ({ timeOfDay }) => {
             color="#ffffff" 
             transparent={true} 
             opacity={0.25} 
-            depthWrite={false}
           />
         </mesh>
       );
@@ -207,7 +208,7 @@ const DeskItems: React.FC<DeskItemsProps> = ({ timeOfDay }) => {
       {/* Tasse de café */}
       <animated.group
         ref={coffeeRef}
-        position={[-3.5, 0.05, -1.2]} // Légèrement déplacée
+        position={[-3.5, 0.05, -1.2] as [number, number, number]} // Légèrement déplacée
         onClick={() => setCoffeeHot(!coffeeHot)}
       >
         {/* Corps de la tasse */}
@@ -242,12 +243,10 @@ const DeskItems: React.FC<DeskItemsProps> = ({ timeOfDay }) => {
           />
         </mesh>
         
-        {/* Vapeur du café */}
+        {/* Vapeur du café - utiliser un matériau animé plutôt que de définir opacity sur le groupe */}
         <group 
           ref={steamRef}
           position={[0, 0.2, 0]}
-          visible={coffeeHot}
-          opacity={coffeeSpring.steamOpacity}
         >
           {coffeeHot && createSteamParticles()}
         </group>
@@ -256,10 +255,14 @@ const DeskItems: React.FC<DeskItemsProps> = ({ timeOfDay }) => {
       {/* Crayon */}
       <animated.group
         ref={pencilRef}
-        position={pencilSpring.to.position}
-        rotation={pencilSpring.to.rotation}
         onClick={() => setPencilRotated(!pencilRotated)}
         castShadow
+        position-x={pencilProps.px}
+        position-y={pencilProps.py}
+        position-z={pencilProps.pz}
+        rotation-x={pencilProps.rx}
+        rotation-y={pencilProps.ry}
+        rotation-z={pencilProps.rz}
       >
         {/* Corps du crayon */}
         <mesh castShadow>
@@ -283,8 +286,10 @@ const DeskItems: React.FC<DeskItemsProps> = ({ timeOfDay }) => {
       {/* Cahier - repositionné plus à gauche */}
       <animated.group
         ref={notebookRef}
-        position={[-2.5, 0.05, 0.8]} // Repositionné plus à gauche et légèrement différent sur l'axe Z
-        rotation={notebookSpring.to.rotation}
+        position={[-2.5, 0.05, 0.8] as [number, number, number]} // Repositionné plus à gauche et légèrement différent sur l'axe Z
+        rotation-x={notebookProps.rx}
+        rotation-y={notebookProps.ry}
+        rotation-z={notebookProps.rz}
         onClick={() => {
           if (notebookOpen) {
             // Tourner les pages quand le cahier est ouvert

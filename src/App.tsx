@@ -5,20 +5,14 @@ import * as THREE from 'three';
 
 import Calculator from './components/Calculator';
 import Desk from './components/Desk';
+import DeskItems from './components/DeskItems';
 import Environment, { TimeOfDay, WeatherType } from './components/Environment';
 import Window from './components/Window';
-import DeskItems from './components/DeskItems';
 
 function App() {
-  // États pour le moment de la journée et la météo
-  const [timeOfDay, setTimeOfDay] = useState<TimeOfDay>('day');
-  const [weather, setWeather] = useState<WeatherType>('clear');
-
-  // Fonction pour mettre à jour les états depuis Environment
-  const handleEnvironmentChange = (newTime: TimeOfDay, newWeather: WeatherType) => {
-    setTimeOfDay(newTime);
-    setWeather(newWeather);
-  };
+  // États pour le moment de la journée et la météo, préfixer avec _ pour éviter les avertissements
+  const [timeOfDay, _setTimeOfDay] = useState<TimeOfDay>('day');
+  const [weather, _setWeather] = useState<WeatherType>('clear');
 
   return (
     <div style={{ width: '100vw', height: '100vh', overflow: 'hidden' }}>
