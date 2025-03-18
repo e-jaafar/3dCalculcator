@@ -1,5 +1,5 @@
 import { useSpring, animated } from '@react-spring/three';
-import { useFrame, useThree } from '@react-three/fiber';
+import { useFrame } from '@react-three/fiber';
 import React, { useRef, useState } from 'react';
 import * as THREE from 'three';
 
@@ -21,9 +21,6 @@ const DeskItems: React.FC<DeskItemsProps> = ({ timeOfDay }) => {
   const notebookRef = useRef<THREE.Group>(null);
   
   // Position de la souris pour interaction avancée
-  const { viewport } = useThree();
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  
   // Animations avec react-spring - ralentissement des animations pour réduire les glitches
   const pencilProps = useSpring({
     px: pencilRotated ? 3 : 3,
@@ -36,10 +33,7 @@ const DeskItems: React.FC<DeskItemsProps> = ({ timeOfDay }) => {
   });
   
   // Animation d'opacité pour la vapeur de café
-  const steamOpacity = useSpring({
-    opacity: coffeeHot ? 1 : 0,
-    config: { duration: 2500 } // Durée plus longue pour transition plus douce
-  });
+
   
   // Animation de rotation du cahier
   const notebookProps = useSpring({
@@ -96,10 +90,7 @@ const DeskItems: React.FC<DeskItemsProps> = ({ timeOfDay }) => {
     }
     
     // Mise à jour de la position de la souris pour interactivité
-    setMousePosition({
-      x: (state.mouse.x * viewport.width) / 2,
-      y: (state.mouse.y * viewport.height) / 2
-    });
+
   });
   
   // Fonction pour créer les particules de vapeur du café - réduites en nombre
