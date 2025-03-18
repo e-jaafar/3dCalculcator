@@ -1,1 +1,1 @@
-{"root":["./src/App.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/components/CalcButton.tsx","./src/components/CalcDisplay.tsx","./src/components/Calculator.tsx","./src/components/Desk.tsx","./vite.config.ts"],"version":"5.6.3"}
+{"root":["./src/app.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/components/calcbutton.tsx","./src/components/calcdisplay.tsx","./src/components/calculator.tsx","./src/components/desk.tsx","./src/components/deskitems.tsx","./src/components/environment.tsx","./src/components/window.tsx","./vite.config.ts"],"errors":true,"version":"5.6.3"}

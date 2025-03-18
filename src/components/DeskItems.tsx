@@ -26,18 +26,24 @@ const DeskItems: React.FC<DeskItemsProps> = ({ timeOfDay }) => {
   
   // Animations avec react-spring - ralentissement des animations pour réduire les glitches
   const pencilSpring = useSpring({
-    rotation: pencilRotated ? [0, 0, Math.PI * 0.25] : [0, 0, 0],
-    position: pencilRotated ? [3, 0.05, 0.5] : [3, 0.05, 0],
+    to: {
+      rotation: pencilRotated ? [0, 0, Math.PI * 0.25] : [0, 0, 0],
+      position: pencilRotated ? [3, 0.05, 0.5] : [3, 0.05, 0],
+    },
     config: { tension: 120, friction: 30 } // Valeurs plus faibles pour animations plus douces
   });
   
   const coffeeSpring = useSpring({
-    steamOpacity: coffeeHot ? 1 : 0,
+    to: {
+      steamOpacity: coffeeHot ? 1 : 0,
+    },
     config: { duration: 2500 } // Durée plus longue pour transition plus douce
   });
   
   const notebookSpring = useSpring({
-    rotation: notebookOpen ? [0, Math.PI * 0.1, 0] : [0, 0, 0],
+    to: {
+      rotation: notebookOpen ? [0, Math.PI * 0.1, 0] : [0, 0, 0],
+    },
     config: { tension: 80, friction: 20 } // Valeurs plus faibles pour animations plus douces
   });
   
@@ -237,20 +243,21 @@ const DeskItems: React.FC<DeskItemsProps> = ({ timeOfDay }) => {
         </mesh>
         
         {/* Vapeur du café */}
-        <animated.group 
+        <group 
           ref={steamRef}
           position={[0, 0.2, 0]}
-          style={{ opacity: coffeeSpring.steamOpacity }}
+          visible={coffeeHot}
+          opacity={coffeeSpring.steamOpacity}
         >
           {coffeeHot && createSteamParticles()}
-        </animated.group>
+        </group>
       </animated.group>
       
       {/* Crayon */}
       <animated.group
         ref={pencilRef}
-        position={pencilSpring.position}
-        rotation={pencilSpring.rotation}
+        position={pencilSpring.to.position}
+        rotation={pencilSpring.to.rotation}
         onClick={() => setPencilRotated(!pencilRotated)}
         castShadow
       >
@@ -277,7 +284,7 @@ const DeskItems: React.FC<DeskItemsProps> = ({ timeOfDay }) => {
       <animated.group
         ref={notebookRef}
         position={[-2.5, 0.05, 0.8]} // Repositionné plus à gauche et légèrement différent sur l'axe Z
-        rotation={notebookSpring.rotation}
+        rotation={notebookSpring.to.rotation}
         onClick={() => {
           if (notebookOpen) {
             // Tourner les pages quand le cahier est ouvert

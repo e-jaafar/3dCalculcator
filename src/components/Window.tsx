@@ -111,8 +111,13 @@ const Window: React.FC<WindowProps> = ({
     }
   });
 
+  // Convertir le tableau de rotation en Euler pour éviter l'erreur de typage
+  const eulerRotation = useMemo(() => {
+    return new THREE.Euler(rotation[0], rotation[1], rotation[2]);
+  }, [rotation]);
+
   return (
-    <group position={position} rotation={rotation as THREE.Euler} scale={scale} ref={windowRef}>
+    <group position={position} rotation={eulerRotation} scale={scale} ref={windowRef}>
       {/* Cadre de fenêtre */}
       <mesh receiveShadow castShadow>
         <boxGeometry args={[2.2, 2.2, 0.1]} />

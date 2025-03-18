@@ -35,12 +35,13 @@ function App() {
           antialias: true, // Important pour réduire les scintillements
           alpha: false, 
           powerPreference: 'high-performance',
-          // Utiliser un renderer WebGL plus simple peut aider avec les problèmes de rendu
-          outputEncoding: THREE.LinearEncoding,
+          // Supprimer outputEncoding et LinearEncoding qui sont obsolètes
         }}
         // Configurer la caméra de façon plus stable
         onCreated={({ gl, camera }) => {
           gl.setClearColor('#121212');
+          // Dans Three.js récent, la colorspace a remplacé outputEncoding
+          gl.outputColorSpace = THREE.SRGBColorSpace;
           camera.updateProjectionMatrix();
         }}
       >
